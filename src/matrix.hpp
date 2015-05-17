@@ -2,7 +2,7 @@
 /*
  *  matrix.hpp
  *  zhengshaoyin
- *  2015/0508
+ *  2015/05/08
  *
  */
 
@@ -15,31 +15,15 @@
 #include <string>
 #include <fstream>
 
+#include "base_matrix.hpp"
+#include "base_operator.hpp"
+
 namespace matrix_space
 {
 /**************************************************************/
 
 template<typename T>
-class matrix;
-
-template<typename T>
-std::ostream& operator<<(std::ostream& outs, matrix<T>& mat);
-template<typename T>
-std::istream& operator>>(std::istream& ins, matrix<T>& mat);
-
-template<typename T>
-matrix<T> transpose(matrix<T>& mat);
-template<typename T>
-matrix<T> operator+(matrix<T>& mat1, matrix<T>& mat2);
-template<typename T>
-matrix<T> operator-(matrix<T>& mat1, matrix<T>& mat2);
-template<typename T>
-matrix<T> operator*(matrix<T>& mat1, matrix<T>& mat2);
-
-/**************************************************************/
-
-template<typename T>
-class matrix
+class matrix : public base_matrix<T>
 {
 public :
     matrix();
@@ -48,46 +32,30 @@ public :
     matrix<T>& operator=(const matrix<T>& mat);
     ~matrix();
 public :
-    size_t get_row_num();
-    size_t get_col_num();
-    T& at(size_t row, size_t col);
-public :
     void read_file(std::string file_name);
     void write_file(std::string file_name);
     void resize(size_t row_num, size_t col_num);
     void reshape(size_t row_num, size_t col_num);
+    void fill(const T& value);
+    void eye(size_t n);
 public :
-    friend std::ostream& operator<<<>(std::ostream& outs, matrix<T>& mat);
-    friend std::istream& operator>><>(std::istream& ins, matrix<T>& mat);
-
-
-    friend matrix<T> transpose<>(matrix<T>& mat);
-    friend matrix<T> operator+<>(matrix<T>& mat1, matrix<T>& mat2);
-    friend matrix<T> operator-<>(matrix<T>& mat1, matrix<T>& mat2);
-    friend matrix<T> operator*<>(matrix<T>& mat1, matrix<T>& mat2);
-private :
-    size_t row_num;
-    size_t col_num;
-    T* data;
+    void operator+=(const matrix<T>& mat);
+    void operator-=(const matrix<T>& mat);
+    void operator*=(const matrix<T>& mat);
+    void operator+=(const T& value);
+    void operator-=(const T& value);
+    void operator*=(const T& value);
 };
 
 /**************************************************************/
 
 template<typename T>
-matrix<T>::matrix()
+matrix<T>::matrix() : base_matrix<T>()
 {
-    this->data = NULL;
-    this->row_num = 256;
-    this->col_num = 1;
-    this->data = new T[this->row_num * this->col_num];
 }
 template<typename T>
-matrix<T>::matrix(size_t row_num, size_t col_num)
+matrix<T>::matrix(size_t row_num, size_t col_num) : base_matrix<T>(row_num, col_num)
 {
-    this->data = NULL;
-    this->row_num = row_num;
-    this->col_num = col_num;
-    this->data = new T[this->row_num * this->col_num];
 }
 template<typename T>
 matrix<T>::matrix(const matrix& mat)
@@ -118,29 +86,6 @@ matrix<T>& matrix<T>::operator=(const matrix<T>& mat)
 template<typename T>
 matrix<T>::~matrix()
 {
-    if(NULL != this->data)
-    {
-        delete [] this->data;
-        this->data = NULL;
-    }
-}
-
-/**************************************************************/
-
-template<typename T>
-size_t matrix<T>::get_row_num()
-{
-    return this->row_num;
-}
-template<typename T>
-size_t matrix<T>::get_col_num()
-{
-    return this->col_num;
-}
-template<typename T>
-T& matrix<T>::at(size_t row, size_t col)
-{
-    return this->data[row * this->col_num + col];
 }
 
 /**************************************************************/
@@ -202,92 +147,121 @@ void matrix<T>::write_file(std::string file_name)
 
     ofs.close();
 }
+template<typename T>
+void matrix<T>::fill(const T& value)
+{
+    for(int i = 0; i < this->row_num; ++i)
+    {
+        for(int j = 0; j < this->col_num; ++j)
+        {
+            this->at(i, j) = value;
+        }
+    }
+}
+template<typename T>
+void matrix<T>::eye(size_t n)
+{
+    this->resize(n, n);
+    for(int i = 0; i < this->row_num; ++i)
+    {
+        for(int j = 0; j < this->col_num; ++j)
+        {
+            if(i == j)
+            {
+                this->at(i, j) = 1;
+            }
+            else
+            {
+                this->at(i, j) = 0;
+            }
+        }
+    }
+}
 
 /**************************************************************/
 
 template<typename T>
-std::ostream& operator<<(std::ostream& outs, matrix<T>& mat)
+void matrix<T>::operator+=(const matrix<T>& mat)
 {
-    for(int i = 0; i < mat.row_num; ++i)
+    if(this->row_num == mat.get_row_num() && this->col_num == mat.get_col_num())
     {
-        for(int j = 0; j < mat.col_num; ++j)
+        for(int i = 0; i < this->row_num; ++i)
         {
-            outs << mat.at(i, j) << " ";     // 1-D to 2-D
-        }
-        outs << endl;
-    }
-    return outs;
-}
-template<typename T>
-std::istream& operator>>(std::istream& ins, matrix<T>& mat)
-{
-    for(int i = 0; i < mat.row_num * mat.col_num; ++i)
-    {
-        ins >> mat.data[i];
-    }
-    return ins;
-}
-template<typename T>
-matrix<T> transpose(matrix<T>& mat)
-{
-    matrix<T> mat_result(mat.col_num, mat.row_num);
-
-    for(int i = 0; i < mat_result.row_num; ++i)
-    {
-        for(int j = 0; j < mat_result.col_num; ++j)
-        {
-            mat_result.at(i, j) = mat.at(j, i);
+            for(int j = 0; j < this->col_num; ++j)
+            {
+                this->at(i, j) += mat.at(i, j);
+            }
         }
     }
-
-    return mat_result;
 }
 template<typename T>
-matrix<T> operator+(matrix<T>& mat1, matrix<T>& mat2)
+void matrix<T>::operator-=(const matrix<T>& mat)
 {
-    matrix<T> mat(mat1);
-    if(mat1.row_num == mat2.row_num && mat1.col_num == mat2.col_num)
+    if(this->row_num == mat.get_row_num() && this->col_num == mat.get_col_num())
     {
-        for(int i = 0; i < mat.row_num * mat.col_num; ++i)
+        for(int i = 0; i < this->row_num; ++i)
         {
-            mat.data[i] += mat2.data[i];
+            for(int j = 0; j < this->col_num; ++j)
+            {
+                this->at(i, j) -= mat.at(i, j);
+            }
         }
     }
-    return mat;
 }
 template<typename T>
-matrix<T> operator-(matrix<T>& mat1, matrix<T>& mat2)
+void matrix<T>::operator*=(const matrix<T>& mat)
 {
-    matrix<T> mat(mat1);
-    if(mat1.row_num == mat2.row_num && mat1.col_num == mat2.col_num)
+    matrix<T> mat_temp(this->row_num, mat.col_num);
+    if(this->col_num == mat.row_num)
     {
-        for(int i = 0; i < mat.row_num * mat.col_num; ++i)
-        {
-            mat.data[i] -= mat2.data[i];
-        }
-    }
-    return mat;
-}
-template<typename T>
-matrix<T> operator*(matrix<T>& mat1, matrix<T>& mat2)
-{
-    matrix<T> mat(mat1.row_num, mat2.col_num);
-    if(mat1.col_num == mat2.row_num)
-    {
-        for(int i = 0; i < mat.row_num; ++i)
+        for(int i = 0; i < this->row_num; ++i)
         {
             for(int k = 0; k < mat.col_num; ++k)
             {
                 T temp = 0;
-                for(int j = 0; j < mat1.col_num; ++j)
+                for(int j = 0; j < this->col_num; ++j)
                 {
-                    temp += mat1.at(i, j) * mat2.at(j, k);
+                    temp += this->at(i, j) * mat.at(j, k);
                 }
-                mat.at(i, k) = temp;
+                mat_temp.at(i, k) = temp;
             }
         }
     }
-    return mat;
+    (*this) = mat_temp;
+}
+
+template<typename T>
+void matrix<T>::operator+=(const T& value)
+{
+    for(int i = 0; i < this->row_num; ++i)
+    {
+        for(int j = 0; j < this->col_num; ++j)
+        {
+            this->at(i, j) += value;
+        }
+    }
+}
+template<typename T>
+void matrix<T>::operator-=(const T& value)
+{
+    for(int i = 0; i < this->row_num; ++i)
+    {
+        for(int j = 0; j < this->col_num; ++j)
+        {
+            this->at(i, j) -= value;
+        }
+    }
+}
+template<typename T>
+void matrix<T>::operator*=(const T& value)
+{
+    for(int i = 0; i < this->row_num; ++i)
+    {
+        for(int j = 0; j < this->col_num; ++j)
+        {
+            this->at(i, j) *= value;
+        }
+    }
 }
 
 /**************************************************************/
