@@ -33,7 +33,7 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Unit filename="../../src/base_matrix.hpp" />
-		<Unit filename="../../src/base_operator.hpp" />
+		<Unit filename="../../src/friend_func.hpp" />
 		<Unit filename="../../src/matrix.hpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>

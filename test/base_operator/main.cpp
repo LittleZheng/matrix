@@ -14,54 +14,61 @@ using namespace matrix_space;
 
 int main()
 {
-    matrix<int> mat1(2, 3);
-    cout << "Input a matrix of 2-by-3 :" << endl;
-    cin >> mat1;
+    matrix<int> mat0(3, 3);
+    cout << "Input a matrix of 3-by-3 :" << endl;
+    cin >> mat0;
     cout << "The matrix A is :" << endl;
-    cout << mat1;
+    cout << mat0;
 
-    matrix<int> mat2;
-    mat2 = transpose(mat1);
-    cout << "The transposed A is :" << endl;
-    cout << mat2;
+    cout << "The A.transpose() is :" << endl;
+    cout << mat0.transpose();
 
-    matrix<int> mat3 = mat1 + mat1;
+    cout << "The A.rotate90() is :" << endl;
+    cout << mat0.rotate90();
+
     cout << "The matrix (A + A) is :" << endl;
-//    cout << mat3;
-    cout << mat1 + mat1;
+    cout << mat0 + mat0;
 
-    matrix<int> mat4 = mat1 - mat1;
     cout << "The matrix (A - A)is :" << endl;
-    cout << mat1 - mat1;
+    cout << mat0 - mat0;
 
-    matrix<int> mat5 = mat1 * mat2;
+    cout << "The matrix A's elements sum is :" << endl;
+    cout << mat0.elem_sum() << endl;
+
     cout << "The matrix (A * A) is :" << endl;
-    cout << mat1 * mat2;
+    cout << mat0 * mat0.transpose();
 
-    mat1.write_file("mat1.txt");
+    cout << "The matrix dot operator  (A .* A) is :" << endl;
+    cout << mat0.dot('*', mat0);
+
+    cout << "The matrix local_dot operator (A .+ one(2, 3)) in (1, 1) is :" << endl;
+    cout << mat0.local_dot('+', matrix<int>::one(2, 2), 1, 1);
+
+    cout << "The matrix A.get_local(0, 0, 2, 2) is :" << endl;
+    cout << mat0.get_local(0, 0, 2, 2);
+
+    cout << "The matrix (A * 7) is :" << endl;
+    cout << mat0 * 7;
+
+    cout << "The matrix matrix<int>::eye(5) is :" << endl;
+    cout << matrix<int>::eye(5);
+
+    cout << "The matrix matrix<int>::zero(5, 7) is :" << endl;
+    cout << matrix<int>::zero(5, 7);
+
+    cout << "The matrix matrix<int>::one(5, 7) is :" << endl;
+    cout << matrix<int>::one(5, 7);
+
+    cout << "The matrix matrix<int>::random(5, 7, 0, 10) is :" << endl;
+    cout << matrix<int>::random(5, 7, 0, 10);
+
+    mat0.write_file("mat0.txt");
     cout << "The matrix A has be saved to file. " << endl;
 
-    matrix<int> mat6;
-    mat6.read_file("mat1.txt");
+    matrix<int> mat1;
+    mat1.read_file("mat0.txt");
     cout << "The matrix read from file is :" << endl;
-    cout << mat6;
-
-    matrix<int> mat7;
-    mat7 = dot('*', mat1, mat6);
-    cout << "The matrix dot operator  (A .* A) is :" << endl;
-    cout << mat7;
-
-//    matrix<int> mat8(mat1);
-//    mat8 *= 7;
-    matrix<int> mat8;
-    mat8 = mat1 * 7;
-    cout << "The matrix (A * 7) is :" << endl;
-    cout << mat8;
-
-    matrix<int> mat9(7, 7);
-    mat9.eye(5);
-    cout << "The matrix A.eye is :" << endl;
-    cout << mat9;
+    cout << mat1;
 
     return 0;
 }
