@@ -110,10 +110,11 @@ matrix<T> operator+(const T& value, const matrix<T>& mat2)
     return mat;
 }
 template<typename T>
-matrix<T> operator-(const T& value, const matrix<T>& mat2)
+matrix<T> operator-(const T& value, const matrix<T>& mat2)  // special minus.
 {
-    matrix<T> mat(mat2);
-    mat -= value;
+    matrix<T> mat(mat2.get_row_num(), mat2.get_col_num());
+    mat.fill(value);
+    mat -= mat2;
     return mat;
 }
 template<typename T>

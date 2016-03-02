@@ -1,9 +1,9 @@
 # depslib dependency file v1.0
-1453321959 source:f:\github\matrix\test\base_operator\main.cpp
+1453367030 source:f:\github\matrix\test\base_operator\main.cpp
 	<iostream>
 	"../../src/matrix.hpp"
 
-1453322243 f:\github\matrix\src\matrix.hpp
+1456923877 f:\github\matrix\src\matrix.hpp
 	<cstring>
 	<cstdlib>
 	<iostream>
@@ -16,5 +16,5 @@
 
 1453310938 f:\github\matrix\src\base_operator.hpp
 
-1453314426 f:\github\matrix\src\friend_func.hpp
+1456924054 f:\github\matrix\src\friend_func.hpp
 

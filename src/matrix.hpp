@@ -47,6 +47,7 @@ public :
     matrix<T> dot(char op, const matrix<T>& mat);
     matrix<T> local_dot(char op, const matrix<T>& mat, size_t row, size_t col); // The size of mat should be less than *this's.
     matrix<T> get_local(size_t row, size_t col, size_t row_num, size_t col_num);
+    T* get_data() const;
 public :
     void operator+=(const matrix<T>& mat);
     void operator-=(const matrix<T>& mat);
@@ -359,6 +360,11 @@ matrix<T> matrix<T>::get_local(size_t row, size_t col, size_t row_num, size_t co
         }
     }
     return mat_result;
+}
+template<typename T>
+T* matrix<T>::get_data() const
+{
+    return this->data;
 }
 
 /**************************************************************/
