@@ -1,11 +1,12 @@
 # depslib dependency file v1.0
-1453367030 source:f:\github\matrix\test\base_operator\main.cpp
+1457098490 source:f:\github\matrix\test\base_operator\main.cpp
 	<iostream>
 	"../../src/matrix.hpp"
 
-1456923877 f:\github\matrix\src\matrix.hpp
+1457098648 f:\github\matrix\src\matrix.hpp
 	<cstring>
 	<cstdlib>
+	<cmath>
 	<iostream>
 	<string>
 	<fstream>

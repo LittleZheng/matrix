@@ -15,6 +15,8 @@ matrix_v0.0 類庫說明
     * 矩陣轉置及旋轉
     * 對標準設備（鍵盤及控制檯）的矩陣輸入輸出
     * 對文件的矩陣讀入讀出
+    * 對矩陣元素的常用函數的計算
+    * 對非奇異矩陣的LU分解
 
 	
 zhengshaoyin
