@@ -42,25 +42,31 @@ public :
     void resize(size_t row_num, size_t col_num);
     void reshape(size_t row_num, size_t col_num);
     void fill(const T& value);
-    T sum();    // All elements add up.
-    T max(size_t& row, size_t& col);
-    T max();
-    T min(size_t& row, size_t& col);
-    T min();
-    matrix<T> transpose();
-    matrix<T> rotate90();
-    matrix<T> inverse();
-    matrix<T> sin();
-    matrix<T> cos();
-    matrix<T> exp();
-    matrix<T> sqrt();
-    matrix<T> log();
-    matrix<T> pow(const T& exponent);
-    matrix<T> dot(char op, const matrix<T>& mat);
-    matrix<T> local_dot(char op, const matrix<T>& mat, size_t row, size_t col); // The size of mat should be less than *this's.
-    matrix<T> get_local(size_t row, size_t col, size_t row_num, size_t col_num);
+    T sum() const;    // All elements add up.
+    T max(size_t& row, size_t& col) const;
+    T max() const;
+    T min(size_t& row, size_t& col) const;
+    T min() const;
+    matrix<T> transpose() const;
+    matrix<T> rotate90() const;
+    matrix<T> reciprocal() const;
+    matrix<T> sin() const;
+    matrix<T> cos() const;
+    matrix<T> exp() const;
+    matrix<T> sqrt() const;
+    matrix<T> log() const;
+    matrix<T> pow(const T& exponent) const;
+    matrix<T> dot(char op, const matrix<T>& mat) const;
+    matrix<T> local_dot(char op, const matrix<T>& mat, size_t row, size_t col) const; // The size of mat should be less than *this's.
+    matrix<T> get_local(size_t row, size_t col, size_t row_num, size_t col_num) const;
     T* get_data() const;
-    bool lu(matrix<T>& L, matrix<T>& U);
+    bool is_square() const;
+    void row_swap(size_t row1, size_t row2);
+    void col_swap(size_t col1, size_t col2);
+    bool lu(matrix<T>& L, matrix<T>& U) const;    // Matrix(0, 0) can not be zero.
+    bool lu(matrix<T>& P, matrix<T>& L, matrix<T>& U) const;
+    T det() const;
+    matrix<T> inverse() const;
 public :
     void operator+=(const matrix<T>& mat);
     void operator-=(const matrix<T>& mat);
@@ -220,7 +226,7 @@ void matrix<T>::fill(const T& value)
     }
 }
 template<typename T>
-T matrix<T>::sum()
+T matrix<T>::sum() const
 {
     T result = (T)0.0;
     for(int i = 0; i < this->row_num; ++i)
@@ -233,7 +239,7 @@ T matrix<T>::sum()
     return result;
 }
 template<typename T>
-T matrix<T>::max(size_t& row, size_t& col)
+T matrix<T>::max(size_t& row, size_t& col) const
 {
     T max_elem = this->at(0, 0);
     row = 0;
@@ -253,7 +259,7 @@ T matrix<T>::max(size_t& row, size_t& col)
     return max_elem;
 }
 template<typename T>
-T matrix<T>::max()
+T matrix<T>::max() const
 {
     T max_elem = this->at(0, 0);
     for(int i = 0; i < this->row_num; ++i)
@@ -269,7 +275,7 @@ T matrix<T>::max()
     return max_elem;
 }
 template<typename T>
-T matrix<T>::min(size_t& row, size_t& col)
+T matrix<T>::min(size_t& row, size_t& col) const
 {
     T min_elem = this->at(0, 0);
     row = 0;
@@ -289,7 +295,7 @@ T matrix<T>::min(size_t& row, size_t& col)
     return min_elem;
 }
 template<typename T>
-T matrix<T>::min()
+T matrix<T>::min() const
 {
     T min_elem = this->at(0, 0);
     for(int i = 0; i < this->row_num; ++i)
@@ -305,7 +311,7 @@ T matrix<T>::min()
     return min_elem;
 }
 template<typename T>
-matrix<T> matrix<T>::transpose()
+matrix<T> matrix<T>::transpose() const
 {
     matrix<T> mat_result(this->col_num, this->row_num);
     for(int i = 0; i < mat_result.row_num; ++i)
@@ -318,7 +324,7 @@ matrix<T> matrix<T>::transpose()
     return mat_result;
 }
 template<typename T>
-matrix<T> matrix<T>::rotate90()
+matrix<T> matrix<T>::rotate90() const
 {
     matrix<T> mat_result(this->col_num, this->row_num);
     for(int i = 0; i < this->row_num; ++i)
@@ -331,7 +337,7 @@ matrix<T> matrix<T>::rotate90()
     return mat_result;
 }
 template<typename T>
-matrix<T> matrix<T>::inverse()
+matrix<T> matrix<T>::reciprocal() const
 {
     matrix<T> mat_result(this->col_num, this->row_num);
     for(int i = 0; i < this->row_num; ++i)
@@ -344,7 +350,7 @@ matrix<T> matrix<T>::inverse()
     return mat_result;
 }
 template<typename T>
-matrix<T> matrix<T>::sin()
+matrix<T> matrix<T>::sin() const
 {
     matrix<T> mat_result(this->col_num, this->row_num);
     for(int i = 0; i < this->row_num; ++i)
@@ -357,7 +363,7 @@ matrix<T> matrix<T>::sin()
     return mat_result;
 }
 template<typename T>
-matrix<T> matrix<T>::cos()
+matrix<T> matrix<T>::cos() const
 {
     matrix<T> mat_result(this->col_num, this->row_num);
     for(int i = 0; i < this->row_num; ++i)
@@ -370,7 +376,7 @@ matrix<T> matrix<T>::cos()
     return mat_result;
 }
 template<typename T>
-matrix<T> matrix<T>::exp()
+matrix<T> matrix<T>::exp() const
 {
     matrix<T> mat_result(this->col_num, this->row_num);
     for(int i = 0; i < this->row_num; ++i)
@@ -383,7 +389,7 @@ matrix<T> matrix<T>::exp()
     return mat_result;
 }
 template<typename T>
-matrix<T> matrix<T>::sqrt()
+matrix<T> matrix<T>::sqrt() const
 {
     matrix<T> mat_result(this->col_num, this->row_num);
     for(int i = 0; i < this->row_num; ++i)
@@ -396,7 +402,7 @@ matrix<T> matrix<T>::sqrt()
     return mat_result;
 }
 template<typename T>
-matrix<T> matrix<T>::log()
+matrix<T> matrix<T>::log() const
 {
     matrix<T> mat_result(this->col_num, this->row_num);
     for(int i = 0; i < this->row_num; ++i)
@@ -409,7 +415,7 @@ matrix<T> matrix<T>::log()
     return mat_result;
 }
 template<typename T>
-matrix<T> matrix<T>::pow(const T& exponent)
+matrix<T> matrix<T>::pow(const T& exponent) const
 {
     matrix<T> mat_result(this->col_num, this->row_num);
     for(int i = 0; i < this->row_num; ++i)
@@ -422,7 +428,7 @@ matrix<T> matrix<T>::pow(const T& exponent)
     return mat_result;
 }
 template<typename T>
-matrix<T> matrix<T>::dot(char op, const matrix<T>& mat)
+matrix<T> matrix<T>::dot(char op, const matrix<T>& mat) const
 {
     matrix<T> mat_result(*this);
     if(this->row_num == mat.row_num && this->col_num == mat.col_num)
@@ -470,7 +476,7 @@ matrix<T> matrix<T>::dot(char op, const matrix<T>& mat)
     return mat_result;
 }
 template<typename T>
-matrix<T> matrix<T>::local_dot(char op, const matrix<T>& mat, size_t row, size_t col)
+matrix<T> matrix<T>::local_dot(char op, const matrix<T>& mat, size_t row, size_t col) const
 {
     matrix<T> mat_result(*this);
     if(this->row_num >= row + mat.row_num && this->col_num >= col + mat.col_num)
@@ -518,7 +524,7 @@ matrix<T> matrix<T>::local_dot(char op, const matrix<T>& mat, size_t row, size_t
     return mat_result;
 }
 template<typename T>
-matrix<T> matrix<T>::get_local(size_t row, size_t col, size_t row_num, size_t col_num)
+matrix<T> matrix<T>::get_local(size_t row, size_t col, size_t row_num, size_t col_num) const
 {
     matrix<T> mat_result(row_num, col_num);
     if(this->row_num >= row + row_num && this->col_num >= col + col_num)
@@ -539,10 +545,35 @@ T* matrix<T>::get_data() const
     return this->data;
 }
 template<typename T>
-bool matrix<T>::lu(matrix<T>& L, matrix<T>& U)
+bool matrix<T>::is_square() const
+{
+    return ((this->row_num == this->col_num));
+}
+template<typename T>
+void matrix<T>::row_swap(size_t row1, size_t row2)
+{
+    for(int i = 0; i < this->col_num; ++i)
+    {
+        T tmp_value = this->at(row1, i);
+        this->at(row1, i) = this->at(row2, i);
+        this->at(row2, i) = tmp_value;
+    }
+}
+template<typename T>
+void matrix<T>::col_swap(size_t col1, size_t col2)
+{
+    for(int i = 0; i < this->row_num; ++i)
+    {
+        T tmp_value = this->at(i, col1);
+        this->at(i, col1) = this->at(i, col2);
+        this->at(i, col2) = tmp_value;
+    }
+}
+template<typename T>
+bool matrix<T>::lu(matrix<T>& L, matrix<T>& U) const
 {
     // Doolittle algorithm.
-    if(this->row_num != this->col_num)
+    if(!(this->is_square()) || (this->at(0, 0) == (T)0))
     {
         return false;
     }
@@ -552,10 +583,6 @@ bool matrix<T>::lu(matrix<T>& L, matrix<T>& U)
     for(int i = 0; i < square_size; ++i)    // U(0, i)
     {
         U.at(0, i) = this->at(0, i);
-    }
-    if(U.at(0, 0) == (T)0)
-    {
-        return false;
     }
     for(int i = 1; i < square_size; ++i)    // L(i, 0)
     {
@@ -592,13 +619,152 @@ bool matrix<T>::lu(matrix<T>& L, matrix<T>& U)
     }
     return true;
 }
+template<typename T>
+bool matrix<T>::lu(matrix<T>& P, matrix<T>& L, matrix<T>& U) const
+{
+    // Doolittle algorithm.
+    if(!(this->is_square()))
+    {
+        return false;
+    }
+
+    matrix<T> tmp_mat(*this);
+    size_t square_size = tmp_mat.row_num;
+    P = matrix<T>::eye(square_size);
+    if(tmp_mat.at(0, 0) == (T)0)
+    {
+        for(size_t i = 1; i < square_size; ++i)
+        {
+            if(tmp_mat.at(i, 0) != (T)0)
+            {
+                P.row_swap(0, i);
+                tmp_mat.row_swap(0, i);
+                break;
+            }
+        }
+    }
+    if(tmp_mat.at(0, 0) == (T)0)
+    {
+        return false;
+    }
+    return tmp_mat.lu(L, U);
+}
+template<typename T>
+T matrix<T>::det() const
+{
+    T det_value = (T)0;
+    if(!(this->is_square()))
+    {
+        return det_value;
+    }
+
+    matrix<T> tmp_mat(*this);
+    size_t square_size = tmp_mat.row_num;
+    bool is_change_sign = false;
+    if(tmp_mat.at(0, 0) == (T)0)
+    {
+        for(size_t i = 1; i < square_size; ++i)
+        {
+            if(tmp_mat.at(i, 0) != (T)0)
+            {
+                is_change_sign = true;
+                tmp_mat.row_swap(0, i);
+                break;
+            }
+        }
+    }
+    if(tmp_mat.at(0, 0) == (T)0)
+    {
+        return det_value;
+    }
+    matrix<T> L;
+    matrix<T> U;
+    if(tmp_mat.lu(L, U))
+    {
+        det_value = (T)1;
+        for(int i = 0; i < square_size; ++i)
+        {
+            det_value *= U.at(i, i);
+        }
+        if(is_change_sign)
+        {
+            det_value *= (T)-1;
+        }
+    }
+    else
+    {
+        det_value = (T)0;
+    }
+
+    return det_value;
+}
+template<typename T>
+matrix<T> matrix<T>::inverse() const    // Failed if the inverse matrix is all zero.
+{
+    size_t square_size = this->row_num;
+    matrix<T> mat_result = matrix<T>::zero(square_size, square_size);
+    if(!(this->is_square()))
+    {
+        return mat_result;
+    }
+
+    matrix<T> tmp_mat(*this);
+    matrix<T> P_inverse = matrix<T>::eye(square_size);
+    if(tmp_mat.at(0, 0) == (T)0)
+    {
+        for(size_t i = 1; i < square_size; ++i)
+        {
+            if(tmp_mat.at(i, 0) != (T)0)
+            {
+                P_inverse.col_swap(0, i);   // P^-1
+                tmp_mat.row_swap(0, i);
+                break;
+            }
+        }
+    }
+    if(tmp_mat.at(0, 0) == (T)0)
+    {
+        return mat_result;
+    }
+    matrix<T> L;
+    matrix<T> U;
+    if(!(tmp_mat.lu(L, U)))
+    {
+        return mat_result;
+    }
+    matrix<T> U_inverse = matrix<T>::zero(square_size, square_size);
+    matrix<T> L_inverse = matrix<T>::zero(square_size, square_size);
+    for(int i = 0; i < square_size; ++i)
+    {
+        U_inverse.at(i, i) = (T)1 / U.at(i, i);
+        L_inverse.at(i, i) = (T)1 / L.at(i, i);
+    }
+    for(int i = 0; i < square_size; ++i)
+    {
+        for(int j = i+1; j < square_size; ++j)
+        {
+            T U_tmp_value = (T)0;
+            T L_tmp_value = (T)0;
+            for(int k = i; k < j; ++k)
+            {
+                U_tmp_value += U_inverse.at(i, k) * U.at(k, j);
+                L_tmp_value += L.at(j, k) * L_inverse.at(k, i);
+
+            }
+            U_inverse.at(i, j) = -U_tmp_value / U.at(j, j);
+            L_inverse.at(j, i) = -L_tmp_value / L.at(j, j);
+        }
+    }
+    mat_result = U_inverse * L_inverse * P_inverse;
+    return mat_result;
+}
 
 /**************************************************************/
 
 template<typename T>
 void matrix<T>::operator+=(const matrix<T>& mat)
 {
-    if(this->row_num == mat.get_row_num() && this->col_num == mat.get_col_num())
+    if(this->row_num == mat.rows() && this->col_num == mat.cols())
     {
         for(int i = 0; i < this->row_num; ++i)
         {
@@ -612,7 +778,7 @@ void matrix<T>::operator+=(const matrix<T>& mat)
 template<typename T>
 void matrix<T>::operator-=(const matrix<T>& mat)
 {
-    if(this->row_num == mat.get_row_num() && this->col_num == mat.get_col_num())
+    if(this->row_num == mat.rows() && this->col_num == mat.cols())
     {
         for(int i = 0; i < this->row_num; ++i)
         {

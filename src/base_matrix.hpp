@@ -22,8 +22,8 @@ public :
     base_matrix(const base_matrix<T>& mat);
     ~base_matrix();
 public :
-    size_t get_row_num() const;
-    size_t get_col_num() const;
+    size_t rows() const;
+    size_t cols() const;
     T at(size_t row, size_t col) const;
     T& at(size_t row, size_t col);
 protected :
@@ -63,12 +63,12 @@ base_matrix<T>::~base_matrix()
 /**************************************************************/
 
 template<typename T>
-size_t base_matrix<T>::get_row_num() const
+size_t base_matrix<T>::rows() const
 {
     return this->row_num;
 }
 template<typename T>
-size_t base_matrix<T>::get_col_num() const
+size_t base_matrix<T>::cols() const
 {
     return this->col_num;
 }

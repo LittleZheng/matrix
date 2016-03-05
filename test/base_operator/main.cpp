@@ -47,8 +47,8 @@ int main()
     cout << "The matrix (A * A) is :" << endl;
     cout << mat0 * mat0.transpose();
 
-    cout << "The matrix A inversed is :" << endl;
-    cout << mat0.inverse();
+    cout << "The matrix A reciprocal is :" << endl;
+    cout << mat0.reciprocal();
 
     cout << "The matrix A sin is :" << endl;
     cout << mat0.sin();
@@ -89,15 +89,18 @@ int main()
     cout << "The matrix matrix<int>::one(5, 7) is :" << endl;
     cout << matrix<float>::one(5, 7);
 
-    cout << "The matrix matrix<int>::random(5, 7, 0, 10) is :" << endl;
-    matrix<float> random_mat = matrix<float>::random(3, 3, 0, 10);
+    cout << "The matrix matrix<int>::random(4, 4, 0, 10) is :" << endl;
+    matrix<float> random_mat = matrix<float>::random(4, 4, 0, 10);
     cout << random_mat;
 
-    cout << "The matrix random 's LU is : " << endl;
+    cout << "The matrix 's LU is : " << endl;
+    matrix<float> P;
     matrix<float> L;
     matrix<float> U;
-    if(random_mat.lu(L, U))
+    if(random_mat.lu(P, L, U))
     {
+        cout << "P : " << endl;
+        cout << P;
         cout << "L : " << endl;
         cout << L;
         cout << "U : " << endl;
@@ -107,6 +110,12 @@ int main()
     {
         cout << "Can not LU! " << endl;
     }
+
+    cout << "The matrix det is : " << endl;
+    cout << random_mat.det() << endl;
+
+    cout << "The matrix inverse is : " << endl;
+    cout << random_mat.inverse();
 
     mat0.write_file("mat0.txt");
     cout << "The matrix A has be saved to file. " << endl;
