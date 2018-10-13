@@ -1,7 +1,6 @@
 
 /*
  *  friend_func.hpp
- *  zhengshaoyin
  *  2015/05/14
  *
  */
@@ -11,7 +10,8 @@
 
 namespace matrix_space
 {
-/**************************************************************/
+
+/******************************************************************************/
 
 template<typename T>
 class matrix;
@@ -42,7 +42,7 @@ matrix<T> operator-(const matrix<T>& mat1, const T& value);
 template<typename T>
 matrix<T> operator*(const matrix<T>& mat1, const T& value);
 
-/**************************************************************/
+/******************************************************************************/
 
 template<typename T>
 std::ostream& operator<<(std::ostream& outs, const matrix<T>& mat)
@@ -147,7 +147,8 @@ matrix<T> operator*(const matrix<T>& mat1, const T& value)
     return mat;
 }
 
-/**************************************************************/
+/******************************************************************************/
+
 }
 
 #endif // FRIEND_FUNC_HPP_INCLUDED

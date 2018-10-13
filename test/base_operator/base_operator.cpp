@@ -1,8 +1,7 @@
 
 /*
  *  main.cpp
- *  zhengshaoyin
- *  2015/0508
+ *  2015/05/08
  *
  */
 
@@ -117,11 +116,11 @@ int main()
     cout << "The matrix inverse is : " << endl;
     cout << random_mat.inverse();
 
-    mat0.write_file("mat0.txt");
+    mat0.write_file("mat_0.mat");
     cout << "The matrix A has be saved to file. " << endl;
 
     matrix<float> mat1;
-    mat1.read_file("mat0.txt");
+    mat1.read_file("mat_0.mat");
     cout << "The matrix read from file is :" << endl;
     cout << mat1;
 

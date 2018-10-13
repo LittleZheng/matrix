@@ -1,7 +1,6 @@
 
 /*
  *  matrix.hpp
- *  zhengshaoyin
  *  2015/05/08
  *
  */
@@ -22,7 +21,8 @@
 
 namespace matrix_space
 {
-/**************************************************************/
+
+/******************************************************************************/
 
 template<typename T>
 class matrix : public base_matrix<T>
@@ -91,7 +91,7 @@ public :
     friend matrix<T> operator* <T>(const matrix<T>& mat1, const T& value);
 };
 
-/**************************************************************/
+/******************************************************************************/
 
 template<typename T>
 matrix<T>::matrix() : base_matrix<T>()
@@ -132,7 +132,7 @@ matrix<T>::~matrix()
 {
 }
 
-/**************************************************************/
+/******************************************************************************/
 
 template<typename T>
 matrix<T> matrix<T>::eye(size_t n)
@@ -182,8 +182,6 @@ matrix<T> matrix<T>::random(size_t row_num, size_t col_num, const T& range_low, 
     }
     return mat_result;
 }
-
-/**************************************************************/
 
 template<typename T>
 void matrix<T>::resize(size_t row_num, size_t col_num)
@@ -759,7 +757,7 @@ matrix<T> matrix<T>::inverse() const    // Failed if the inverse matrix is all z
     return mat_result;
 }
 
-/**************************************************************/
+/******************************************************************************/
 
 template<typename T>
 void matrix<T>::operator+=(const matrix<T>& mat)
@@ -845,7 +843,7 @@ void matrix<T>::operator*=(const T& value)
     }
 }
 
-/**************************************************************/
+/******************************************************************************/
 
 template<typename T>
 void matrix<T>::read_file(std::string file_name)
@@ -876,7 +874,7 @@ void matrix<T>::write_file(std::string file_name)
     ofs.close();
 }
 
-/**************************************************************/
+/******************************************************************************/
 
 }
 
